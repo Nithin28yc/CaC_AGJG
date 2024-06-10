@@ -1,0 +1,61 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+podTemplate(label: label, containers: [
+    containerTemplate(name: 'maven', image: 'maven:3.8-openjdk-11', ttyEnabled: true, command: 'cat'),
+    
+      ]) {
+ currentBuild.description = "CDP,HIPPA,PCI,SOX-${Project_Name}-${Workpod}"
+    node(label) {
+    	properties([pipelineTriggers([cron("${Schedule_Frequency}")]),
+        parameters([string(name: 'Schedule_Frequency', defaultValue: "$Schedule_Frequency"),
+        string(name: 'GIT_URL' , defaultValue: "$GIT_URL"),
+        string(name: 'appURL', defaultValue: "http://a34ffe14581144f8a914f8ece9390834-2125881336.us-east-2.elb.amazonaws.com"),
+        string(name: 'Workpod', defaultValue: "$Workpod"),
+        string(name: 'Project_Name', defaultValue: "$Project_Name")])
+        ])
+	 stage('repo clonning') {
+git branch: "compliance", url: "http://gitlab.ethan.svc.cluster.local:8084/gitlab/root/complianceascode_master.git" ,credentialsId: "gitlab"     
+echo "${GIT_URL}"
+}
+stage('Use of captcha'){
+    sh 'sleep 70'
+}
+stage('mfa- password check'){
+    sh 'sleep 93'
+}
+stage('mfa- pin check'){
+    sh 'sleep 105'
+}
+try{
+	stage('mfa -biometric check')
+{
+	container('maven') {
+	sh '''
+    cd Compliance_Check
+    pwd
+     mvn test -DappURL="$appURL" -Dusername="$user_name" -Dpassword="$user_password" -DsuiteXmlFile=testing_MFA.xml
+	 '''
+	}
+    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    sh "exit 0"
+                }
+}
+}
+catch(Exception e){
+     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh "exit 1"
+                }
+}
+stage ('Nexus upload'){
+    container('maven'){
+
+	withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+				  sh '''
+				  cd "$PWD"/test-output/TestReport
+				  mv *.zip MFA.zip
+				  curl --upload-file MFA.zip -u $USERNAME:$PASSWORD -v http://nexus.ethan.svc.cluster.local:8083/nexus/repository/Compliance_Security/${JOB_NAME}/$BUILD_ID/
+				  '''
+				}
+	}
+}
+}
+}

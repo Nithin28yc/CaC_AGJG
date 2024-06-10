@@ -1,0 +1,64 @@
+image: markhobson/maven-chrome:jdk-11
+
+stages:
+    - repo-clone
+    - EU-and-Non-EU-data-policy
+    - data-subject-rights
+    - privacy-policy   
+    - data-privacy-agreement-policy
+
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+
+Repo-Cloning:
+    stage: repo-clone
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+                        
+EU and Non EU data policy:
+    stage: EU-and-Non-EU-data-policy
+    script:
+        - sleep 51
+            
+Data subject rights:
+    stage: data-subject-rights
+    script:
+        - sleep 58
+
+Privacy policy:
+    stage: privacy-policy
+    script:
+        - sleep 40
+            
+Data Privacy Agreement Policy:
+    stage: data-privacy-agreement-policy
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - mvn test -DappURL="$appURL" -DenterpriseID="$USERNAME" -DenterprisePassword="$PASSWORD" -DsuiteXmlFile=DataTransfer_Policy.xml
+        - cd `pwd`/test-output/TestReport
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport
+            
+
+        
+        
+

@@ -1,0 +1,46 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-clonning
+    - PII-data-masking
+    - data-scrambling
+    - data-masking
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+Repo-Clonning:
+    stage: repo-clonning
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+PII-Data-Masking:
+    stage: PII-data-masking
+    script:
+        - sleep 67
+Data-Scrambling:
+    stage: data-scrambling
+    script:
+        - sleep 55
+Data-Masking:
+    stage: data-masking
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - mvn test -DappURL="$appURL" -Dusername="$user_name" -Dpassword="$user_password" -DsuiteXmlFile=Data_Masking.xml
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport

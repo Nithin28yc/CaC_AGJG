@@ -1,0 +1,49 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-clonning
+    - TLS-protocol-for-data-transmit
+    - Network-layer-security
+    - AES-256-Encryption-in-transit
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+Repo-Clonning:
+    stage: repo-clonning
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+TLS-protocol-for-data-transmit:
+    stage: TLS-protocol-for-data-transmit
+    script:
+        - sleep 35
+Network-layer-security:
+    stage: Network-layer-security
+    script:
+        - sleep 66
+AES-256-Encryption-in-transit:
+    stage: AES-256-Encryption-in-transit
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+
+    script: 
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - mvn test -Dusername="$User_name" -Dpassword="$User_Password" -DsuiteXmlFile=DataInTransitEncrypt.xml
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-ouput/TestReport
+
+

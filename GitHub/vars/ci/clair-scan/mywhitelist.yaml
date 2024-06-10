@@ -1,0 +1,59 @@
+generalwhitelist:
+  CVE-2016-2090: libbsd
+  CVE-2017-16914: linux
+  CVE-2017-9984: linux
+  CVE-2017-10663: Redhat
+  CVE-2018-15686: Redhat
+  CVE-2017-15670: Redhat
+  CVE-2018-6551: Redhat
+  CVE-2018-12931: realtime-kernel
+  CVE-2018-14612: kernel
+  CVE-2018-14611: kernel
+  CVE-2018-14610: kernel
+  CVE-2017-18269: kernel
+  CVE-2018-12930: kernel
+  CVE-2019-7308: kernel
+  CVE-2018-14614: linux
+  CVE-2018-14613: linux
+  CVE-2018-20030: libbsd
+  CVE-2017-100037: linux
+  CVE-2013-7445: linux
+  CVE-2019-8980: linux
+  CVE-2018-9517: linux
+  CVE-2019-3822: libcurl
+  CVE-2018-13347: Redhat
+  CVE-2017-17914: Redhat
+  CVE-2018-14551: imagemagick
+  CVE-2017-1000408: Redhat
+  CVE-2017-17458: Redhat
+  CVE-2017-12424: Redhat
+  CVE-2018-20169: linux
+  CVE-2017-14532: imagemagick
+  CVE-2017-1000476: imagemagick
+  CVE-2017-12429: imagemagick
+  CVE-2017-12424: Redhat
+  CVE-2016-2779: linux
+  CVE-2018-1000001: Redhat
+  CVE-2018-6485: Redhat
+  CVE-2018-6954: Redhat
+  CVE-2017-16997: libbsd
+  CVE-2019-9169: Redhat
+  CVE-2017-17480: Redhat
+  CVE-2017-15804: libbsd
+  CVE-2018-14616: linux
+  CVE-2018-14551: Redhat
+  CVE-2017-14062: libidn
+  CVE-2017-1000379: linux
+  CVE-2019-3823: libcurl
+  CVE-2019-8912: linux
+  
+images:
+  centos:
+    RHSA-2017: 2479
+    RHSA-2018: 0805
+  alpine:
+    CVE-2017-9671: alpine
+  fluent/fluent-bit:
+    CVE-2017-14062: Integer
+    CVE-2018-6485: Integer
+    CVE-2017-14062: Integer

@@ -1,0 +1,32 @@
+image: markhobson/maven-chrome:jdk-11
+
+stages:
+    - repo-cloning
+    - user-access-permission
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+cache:
+    paths:
+        - .m2/repository
+        - target
+Repo-Cloning:
+    stage: repo-cloning
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode/
+    artifacts:
+        paths:
+            - ct_complianceascode/
+User_access_permission:
+    stage: user-access-permission
+    script:
+        - cd ct_complianceascode
+        - cd Compliance_Check
+        - pwd
+        - mvn test -DappURL="$appURL" -DenterpriseID=$USERNAME -DenterprisePassword=$PASSWORD -Dreponame="$Reponame" -Duname="$User_name" -DsuiteXmlFile=User_AccessManagement.xml
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport

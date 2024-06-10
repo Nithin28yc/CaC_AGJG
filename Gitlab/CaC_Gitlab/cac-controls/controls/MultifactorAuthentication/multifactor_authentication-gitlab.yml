@@ -1,0 +1,59 @@
+mage: markhobson/maven-chrome:jdk-11
+
+stages:
+    - repo-clone
+    - use-of-captcha
+    - mfa-password-check
+    - mfa-pin check
+    - mfa-biometric check
+    
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+
+Repo-Cloning:
+    stage: repo-clone
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+            
+Use of captcha:
+    stage: use-of-captcha
+    script:
+        - sleep 70
+
+MFA password check:
+    stage: mfa-password-check
+    script:
+        - sleep 93
+
+MFA pin check:
+    stage: mfa-pin check
+    script:
+        - sleep 105
+
+MFA biometric check:
+    stage: mfa-biometric check
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - mvn test -DappURL="$appURL" -Dusername="$user_name" -Dpassword="$user_password" -DsuiteXmlFile=testing_MFA.xml
+        - cd `pwd`/test-output/TestReport
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport

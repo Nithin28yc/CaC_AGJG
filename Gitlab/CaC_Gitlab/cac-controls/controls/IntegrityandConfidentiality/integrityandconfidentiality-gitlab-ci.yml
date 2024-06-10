@@ -1,0 +1,44 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-cloning
+    - data-breach-policy
+    - password-policy-and-guidelines
+    - policies-for-confidentiality
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+cache:
+    paths:
+        - .m2/repository
+        - target
+Repo-Cloning:
+    stage: repo-cloning
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+Data-Breach-Policy:
+    stage: data-breach-policy
+    script:
+        - sleep 84
+Password-Policy-and-Guidelines:
+    stage: password-policy-and-guidelines
+    script:
+        - sleep 74
+Policies-for-Confidentiality:
+    stage: policies-for-confidentiality
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - mvn test -DappURL="$appURL" -Dusername="$user_name" -Dpassword="$user_password" -DsuiteXmlFile=DataClassification.xml
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport

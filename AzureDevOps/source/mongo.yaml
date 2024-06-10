@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongopy
+spec:
+  selector:
+    matchLabels:
+      app: mongopy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongopy
+    spec:
+      imagePullSecrets:
+        - name: gitlab-auth
+      containers:
+      - name: python
+        image: dns/root/docker_registry/aiindevops.azurecr.io/mongo:3.4
+        ports:
+        - containerPort: 27017
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mongopy
+  name: mongopy
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: mongopy
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

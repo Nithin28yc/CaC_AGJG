@@ -1,0 +1,43 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-clonning
+    - standards-and-procedure
+    - set-reminders
+    - terms-of-use
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+cache:
+    paths:
+        - .m2/repository
+        - target
+Repo-Clonning:
+    stage: repo-clonning
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+Standards-And_Procedure:
+    stage: standards-and-procedure
+    script:
+        - sleep 57
+Set-Reminders:
+    stage: set-reminders
+    script:
+        - sleep 86
+Terms-of-Use:
+    stage: terms-of-use
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - mvn test -DappURL="$appURL" -DsuiteXmlFile=Legal_Contractual.xml
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport

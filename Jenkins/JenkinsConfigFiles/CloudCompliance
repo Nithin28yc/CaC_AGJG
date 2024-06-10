@@ -1,0 +1,109 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+def serviceaccount = "jenkins-admin"
+podTemplate(label: label, serviceAccount: serviceaccount,
+    containers: [containerTemplate(name: 'docker', image: 'docker:20.10', ttyEnabled: true, command: 'cat'),
+    	containerTemplate(name: 'ubuntu', image: 'ubuntu', ttyEnabled: true, command: 'cat',),
+    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'pipenv', image: 'kennethreitz/pipenv:latest', ttyEnabled: true, alwaysPullImage: true, command: 'cat')],
+    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+    imagePullSecrets: [ 'regcred' ]
+)
+
+{
+    currentBuild.description = "GDPR,HIPPA,PCI,SOX-${Project_Name}-${Workpod}"
+	node(label)
+{
+    properties([pipelineTriggers([cron("${Schedule_Frequency}")]),
+        parameters([string(name: 'Schedule_Frequency', defaultValue: "$Schedule_Frequency"),
+        string(name: 'GIT_URL', defaultValue: "$GIT_URL"),
+        string(name: 'filepath', defaultValue: "$filepath"),
+        string(name: 'Workpod', defaultValue: "$Workpod"),
+        string(name: 'Project_Name', defaultValue: "$Project_Name")])
+        ])
+//    currentBuild.description = "$foldername"
+ stage('repo clonning') {
+	git branch: "compliance", url: "http://gitlab.ethan.svc.cluster.local:8084/gitlab/root/complianceascode_master.git" ,credentialsId: "gitlab"   
+	echo "${GIT_URL}"
+	sh''' 
+	cd "$PWD" 
+	'''
+	sh "cd Terraform/Terraform_AWS"
+}
+	
+stage('CheckOV-Terraform')
+	{
+	container('ubuntu')
+	{
+// 	    	sh''' 
+// 	cd "$PWD/Terraform/Terraform_AWS" 
+// 	'''
+	   
+// 	sh "ls"
+//     sh "pipenv install"
+//     sh "pipenv run pip install checkov"
+//     sh "pipenv run checkov --file main.tf -o junitxml > result.xml || true"
+//     junit "result.xml"
+sh '''
+     apt update
+# apt install software-properties-common -y
+# add-apt-repository ppa:deadsnakes/ppa
+# apt install python3.7 -y
+ apt install python3-pip -y
+ pip3 install -U checkov
+ checkov --directory ${filepath} -o junitxml > result.xml || true
+ '''
+ junit "result.xml"
+ 
+    }
+	}
+stage('KICS') {
+  
+    container('docker')
+    {
+ echo 'Installing Kics.'
+     sh '''
+      wget -q -c https://github.com/Checkmarx/kics/releases/download/v1.2.4/kics_1.2.4_Linux_x64.tar.gz -O /tmp/kics.tar.gz
+      tar xfzv /tmp/kics.tar.gz -C /tmp/
+      # echo 'Extraction completed'
+      mkdir -p results
+      ls -lrt
+      /tmp/kics scan --ci --no-color -p ${WORKSPACE} --output-path results --report-formats "html"
+      cd results
+      ls
+      mv results.html kicsreport.html
+      '''
+       container('ubuntu'){
+           sh'''
+             cd "$PWD"/results
+		     apt-get update
+		     apt-get install zip -y
+             zip Cloud_Compliance.zip kicsreport.html
+      '''
+ //     		 sh 'cd "$PWD"/results'
+//			 sh 'mv results.html kicsreport.html'
+//             sh 'Cloud_Compliance.zip kicsreport.html'
+}
+/*stage('Network security'){
+    sh 'sleep 67'
+}
+stage('Firewall rule security'){
+    sh 'sleep 87'
+}
+stage('Data storage and encryption'){
+    sh 'sleep 57'
+}*/
+  stage('Nexus-upload'){
+    container('maven'){
+      withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+				  sh '''
+				  cd "$PWD"/results
+				  curl --upload-file Cloud_Compliance.zip -u $USERNAME:$PASSWORD -v http://nexus.ethan.svc.cluster.local:8083/nexus/repository/Compliance_Security/${JOB_NAME}/$BUILD_ID/
+				 
+                  '''
+				}
+    }
+    }
+  }
+    }
+}
+}

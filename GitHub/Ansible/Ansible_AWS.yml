@@ -1,0 +1,94 @@
+#################################################################################
+#                     resources created                                         #
+#   VPC, Subnet, internet gateway, route table, security group, ec2 Instance    #
+#################################################################################
+---
+  - name: vpc subnet routetable creation
+    hosts: localhost
+    connection: local
+    tasks:
+            - name: vpc creation
+              ec2_vpc_net:
+                      name: ansible_vpc
+                      cidr_block: 10.0.0.0/16
+                      tags:
+                        Name: ansible_vpc
+                        module: ec2_vpc_net
+                        this: works
+                      tenancy: default
+              register: vpc_net
+
+            - name: new vpc_subnet
+              ec2_vpc_subnet:
+                      state: present
+                      vpc_id: "{{vpc_net.vpc.id}}"
+                      cidr: 10.0.1.16/28
+                      tags:
+                        Name: ansible_subnet
+              register: valueSubnet
+
+            - name: internet gateway for route tables
+              ec2_vpc_igw:
+                  vpc_id: "{{ vpc_net.vpc.id }}"
+                  state: present
+                  tags:
+                    Name: ansible_igw
+              register: igw
+
+            - name: adding new route table
+              ec2_vpc_route_table:
+                      vpc_id: "{{ vpc_net.vpc.id }}"
+                      tags:
+                              Name: ansible_routetable
+                      subnets:
+                              - 'ansible_subnet'
+                      routes:
+                              - dest: 0.0.0.0/0
+                               gateway_id: "{{ igw.gateway_id }}"
+
+            - name:  creating security group
+              ec2_group:
+                        name: ansible
+                        description: security group for ansible
+                        vpc_id: "{{ vpc_net.vpc.id }}"
+                        rules:
+                          - proto: tcp
+                            ports:
+                              - 22
+                            cidr_ip: 223.189.113.222/32
+                        tags:
+                          Name: ansible_sec
+              register: security_grp
+
+          #  - name: new eip
+          #    ec2_eip:
+           #           in_vpc: yes
+           #   register: eip
+
+           # - name: Create new nat gateway 
+          #  ec2_vpc_nat_gateway:
+           #      state: present
+            #     subnet_id: "{{ valueSubnet.subnet.id }}"
+             #    eip_address: "{{ eip.public_ip }}"
+              #   wait: yes
+               #  if_exist_do_not_create: true
+             # register: new_natgateway
+
+        #    - name: create a new ec2 key pair, returns generated private key
+         #     ec2_key:
+         #        name: ansible_keypair
+          #    register: keypair
+
+            - name: ec2 launch
+              ec2:
+                key_name: cloudKeyPair
+                instance_type: t2.micro
+               image: ami-0567f647e75c7bc05
+                wait: yes
+                group_id : "{{ security_grp.group_id }}"
+                count: 1
+                vpc_subnet_id: "{{ valueSubnet.subnet.id }}"
+                assign_public_ip: yes
+                instance_tags:
+                  Name: ansible_Instance
+             register: ec2

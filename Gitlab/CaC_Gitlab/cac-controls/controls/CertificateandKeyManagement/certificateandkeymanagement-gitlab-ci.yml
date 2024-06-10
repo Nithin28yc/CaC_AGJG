@@ -1,0 +1,63 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-cloning
+    - customer-managed-key-encryption
+    - verify-ssl-certificate
+    - rotation-of-the-keys
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+Repo-Cloning:
+    stage: repo-cloning
+    script:
+        - pwd
+        - git init
+        - git clone https://showcase2.continuoustestplatform.com/gitlab/root/chef-inspec-internal-validation.git/
+        - ls -lart
+        - cd chef-inspec-internal-validation
+    artifacts:
+        paths:
+            - chef-inspec-internal-validation/
+Customer-Managed-Key-Encryption:
+    stage: customer-managed-key-encryption
+    image: ubuntu
+    script:
+        - cd chef-inspec-internal-validation
+        - ls
+        - cd aws
+        - cd chef-inspec-aws
+        - apt update
+        - apt install curl -y
+        - curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
+        - dpkg -i $(pwd)/inspec.deb
+        - inspec
+        - inspec --chef-license=accept
+        - sed -i -e s/name/$Key_name/g aws/controls/Ceritifcate_Key_Management-customer_managed_key_encryption.rb
+        - cat aws/controls/Ceritifcate_Key_Management-customer_managed_key_encryption.rb
+        - aws_access_key_id=AWS_ACCESS_KEY_ID aws_secret_access_key=AWS_SECRET_ACCESS_KEY inspec exec aws/controls/Ceritifcate_Key_Management-customer_managed_key_encryption.rb -t aws://$region --reporter cli yaml:KeyEncryption_Chef-inspec.yaml
+        - cat KeyEncryption_Chef-inspec.yaml
+Verify-ssl-Certificate:
+    stage: verify-ssl-certificate
+    script:
+        - sleep 67
+Rotation-Of-Keys:
+    stage: rotation-of-the-keys
+    image: ubuntu
+    script:
+        - cd chef-inspec-internal-validation
+        - ls
+        - cd aws
+        - cd chef-inspec-aws
+        - apt update
+        - apt install curl -y
+        - curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
+        - dpkg -i $(pwd)/inspec.deb
+        - inspec
+        - inspec --chef-license=accept
+        - sed -i -e s/name/$Key_name/g aws/controls/Ceritifcate_Key_Management-rotation_of_keys.rb
+        - aws_access_key_id=AWS_ACCESS_KEY_ID aws_secret_access_key=AWS_SECRET_ACCESS_KEY inspec exec aws/controls/Ceritifcate_Key_Management-rotation_of_keys.rb -t aws://$region --reporter cli yaml:KeyRotation_Chef-inspec.yaml
+        - cat KeyRotation_Chef-inspec.yaml

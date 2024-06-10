@@ -1,0 +1,115 @@
+[
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null
+            },
+            "codecommit": {
+                "associations": [
+                    
+                ],
+                "codecommitid": "439",
+                "collaborators": null,
+                "commitedfiles": "requirements.txt",
+                "count": null,
+                "created_by": "p.chowdary.prasad.k",
+                "created_on": "2022-06-23T04:39:13.000",
+                "details": "Updated requirements.txt",
+                "files_modified": "requirements.txt",
+                "parentcommitid": null,
+                "pull_request": null,
+                "raw_url": null,
+                "reponame": "Branch",
+                "sasttoolurl": null,
+                "type": "tfvc"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 2,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 2,
+                    "major_issues": 1,
+                    "minor_issues": 0,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 1,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 0,
+                    "reliability_remediation_effort": 10
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 1.0,
+                    "security_remediation_effort": 0,
+                    "vulnerabilities": 0
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 78
+                },
+                "unittests": {
+                    "coverage": 0.0,
+                    "line_coverage": 0.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "codereview": {
+                "assignee_name": null,
+                "author_name": null,
+                "childcommitid": null,
+                "closed_at": null,
+                "closed_by": null,
+                "created_at": null,
+                "description": null,
+                "id": null,
+                "merge_status": null,
+                "merged_at": null,
+                "merged_by": null,
+                "project_id": null,
+                "source_branch": null,
+                "state": null,
+                "target_branch": null,
+                "title": null,
+                "updated_at": null
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting",
+                "projectname": "SIMongoTesting",
+                "tool_instance_url": null
+            },
+            "timestamp": "Thu, 23 Jun 2022 04:39:24 GMT",
+            "uniqueid": null
+        }
+    }
+]
+HTTP/1.1 200 OK

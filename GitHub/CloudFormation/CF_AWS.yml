@@ -1,0 +1,154 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "EC2 launch using cloudFormation"
+Resources:
+  # Creating VPC for ec2
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: false
+      EnableDnsHostnames: false
+      Tags:
+       - Key: Name
+         Value: !Join [' ',[!Ref "AWS::StackName", "-VPC" ]]
+
+  # Creating Subnet for vpc
+  PublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [ 0, !GetAZs ]    # Get the first AZ in the list       
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-Public-A
+
+  # Our VPC will need internet access    
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    DependsOn: VPC
+    Properties:
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-igw
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    # Notice how you can't attach an IGW to a VPC unless both are created:
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # Some route tables for our subnets:
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: Public
+  PublicRoute1:   # Public route table has direct routing to IGW:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+   # Associate route table (which contains default route) to newly created subnet
+  myPublicRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnetA
+      
+  #Attaching eip to vpc
+  ElasticIPAddress:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: VPC
+      Tags:
+       - Key: Name
+         Value: !Sub EIP-${AWS::StackName}
+
+  # A NAT Gateway:
+  NATGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt ElasticIPAddress.AllocationId
+      SubnetId: !Ref PublicSubnetA
+      Tags:
+      - Key: Name
+        Value: !Sub NAT-${AWS::StackName}
+
+  # A Security Group
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 223.186.120.235/32
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-SG
+
+  NewVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      Encrypted: true
+      Size: 2
+      VolumeType: gp2
+      AvailabilityZone: !GetAtt PublicSubnetA.AvailabilityZone
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-volume
+    DeletionPolicy: Snapshot
+
+  #Launching an ec2 instance
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+        ImageId: ami-0567f647e75c7bc05
+        KeyName: cloudKeyPair
+        InstanceType: t2.micro
+        NetworkInterfaces:
+          - GroupSet:
+              - !Ref InstanceSecurityGroup
+            AssociatePublicIpAddress: 'true'
+            DeviceIndex: '0'
+            SubnetId: !Ref PublicSubnetA
+        Volumes:
+          -
+           Device: "/dev/sdf"
+           VolumeId: !Ref NewVolume
+        Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Instance
+
+    #Creating S3 storage
+  # S3Bucket:
+  #   DeletionPolicy: Delete
+  #   Type: 'AWS::S3::Bucket'
+  #   Description: Creating Amazon S3 bucket from CloudFormation
+  #   Properties:
+  #     BucketName: !Sub 'encryptedbucket-${AWS::Region}-${AWS::AccountId}'
+  #     AccessControl: Private
+  #     PublicAccessBlockConfiguration:
+  #       BlockPublicAcls: true
+  #       BlockPublicPolicy: true
+  #       IgnorePublicAcls: true
+  #       RestrictPublicBuckets: true
+  #     BucketEncryption:
+  #       ServerSideEncryptionConfiguration:
+  #         - ServerSideEncryptionByDefault:
+  #             SSEAlgorithm: AES256
+  #     VersioningConfiguration:
+  #       Status: Enabled

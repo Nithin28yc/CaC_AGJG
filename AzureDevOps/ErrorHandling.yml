@@ -1,0 +1,63 @@
+# Variable 'appURL' was defined in the Variables tab
+# Variable 'password' was defined in the Variables tab
+# Variable 'PWD' was defined in the Variables tab
+# Variable 'suitexml' was defined in the Variables tab
+# Variable 'username' was defined in the Variables tab
+variables:
+- name: BuildParameters.mavenPOMFile
+  value: Compliance_Check/pom.xml
+name: $(date:yyyyMMdd)$(rev:.r)
+jobs:
+- job: Job_1
+  displayName: Agent job 1
+  pool:
+    name: cac
+  steps:
+  - checkout: self
+    fetchDepth: 1
+  - task: Bash@3
+    displayName: Bash Script
+    inputs:
+      targetType: inline
+      script: >-
+        # Write your commands here
+
+
+        echo 'Hello world'
+
+        echo 'test'
+
+        echo '$(build.artifactstagingdirectory)'
+
+        env | sort
+  - task: replacetokens@5
+    displayName: Replace tokens in ErrorHandling.xml
+    inputs:
+      rootDirectory: Compliance_Check
+      targetFiles: Invalid_Parameter.xml
+      tokenPattern: azpipelines
+  - task: replacetokens@5
+    displayName: Replace tokens in testBase.java
+    inputs:
+      rootDirectory: Compliance_Check/src/test/java/Generic/TestBase
+      targetFiles: testBase.java
+  - task: Maven@3
+    displayName: Maven Compliance_Check/pom.xml
+    inputs:
+      mavenPOMFile: $(BuildParameters.mavenPOMFile)
+      goals: test
+      options: test -Dsurefire.suiteXmlFiles=Invalid_Parameter.xml
+      testResultsFiles: /home/azureuser/myagent/_work/ErrorHandling/test-output
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+    condition: succeededOrFailed()
+    inputs:
+      SourceFolder: /home/azureuser/myagent/_work/ErrorHandling/test-output
+      Contents: Zip_**.zip
+      TargetFolder: $(build.artifactstagingdirectory)
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    condition: succeededOrFailed()
+    inputs:
+      PathtoPublish: $(build.artifactstagingdirectory)
+...

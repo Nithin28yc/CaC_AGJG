@@ -1,0 +1,98 @@
+# Variable 'appURL' was defined in the Variables tab
+# Variable 'password' was defined in the Variables tab
+# Variable 'PWD' was defined in the Variables tab
+# Variable 'suitexml' was defined in the Variables tab
+# Variable 'username' was defined in the Variables tab
+variables:
+- name: BuildParameters.mavenPOMFile
+  value: Compliance_Check/pom.xml
+name: $(date:yyyyMMdd)$(rev:.r)
+jobs:
+- job: Job_1
+  condition: always()
+  displayName: Agent job 1
+  pool:
+    name: cac
+  steps:
+  - checkout: self
+    fetchDepth: 1
+  - task: Bash@3
+    displayName: Bash Script
+    inputs:
+      targetType: inline
+      script: >-
+        # Write your commands here
+
+
+        echo 'Hello world'
+
+        echo 'test'
+
+        echo '$(build.artifactstagingdirectory)'
+
+        env | sort
+  - task: replacetokens@5
+    displayName: Replace tokens in DNSHeaders.xml
+    inputs:
+      rootDirectory: Compliance_Check
+      targetFiles: DNSHeaders.xml
+      tokenPattern: azpipelines
+  - task: replacetokens@5
+    displayName: Replace tokens in testBase.java
+    inputs:
+      rootDirectory: Compliance_Check/src/test/java/Generic/TestBase
+      targetFiles: testBase.java
+  - task: Maven@3
+    displayName: Maven DNSHeaders Compliance_Check/pom.xml
+    inputs:
+      mavenPOMFile: $(BuildParameters.mavenPOMFile)
+      goals: test
+      options: test -Dsurefire.suiteXmlFiles=DNSHeaders.xml
+      testResultsFiles: /home/azureuser/myagent/_work/TLS/test-output
+  - task: CopyFiles@2
+    displayName: 'Copy Files DNSHeaders to: $(build.artifactstagingdirectory)'
+    condition: succeededOrFailed()
+    inputs:
+      SourceFolder: /home/azureuser/myagent/_work/TLS/test-output
+      Contents: Zip_**.zip
+      TargetFolder: $(build.artifactstagingdirectory)
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: DNSHeaders'
+    condition: succeededOrFailed()
+    inputs:
+      PathtoPublish: $(build.artifactstagingdirectory)
+
+  - task: replacetokens@5
+    displayName: Replace tokens in SslLabs_AWS.xml
+    condition: succeededOrFailed()
+    inputs:
+      rootDirectory: Compliance_Check
+      targetFiles: SslLabs_AWS.xml
+      tokenPattern: azpipelines
+  - task: replacetokens@5
+    displayName: Replace tokens in testBase.java
+    condition: succeededOrFailed()
+    inputs:
+      rootDirectory: Compliance_Check/src/test/java/Generic/TestBase
+      targetFiles: testBase.java
+  - task: Maven@3
+    displayName: Maven SslLabs_AWS Compliance_Check/pom.xml
+    condition: succeededOrFailed()
+    inputs:
+      mavenPOMFile: $(BuildParameters.mavenPOMFile)
+      goals: test
+      options: test -Dsurefire.suiteXmlFiles=SslLabs_AWS.xml
+      testResultsFiles: /home/azureuser/myagent/_work/TLS/test-output
+  - task: CopyFiles@2
+    displayName: 'Copy Files SslLabs_AWS to: $(build.artifactstagingdirectory)'
+    condition: succeededOrFailed()
+    inputs:
+      SourceFolder: /home/azureuser/myagent/_work/TLS/test-output
+      Contents: Zip_**.zip
+      TargetFolder: $(build.artifactstagingdirectory)
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: SslLabs_AWS'
+    condition: succeededOrFailed()
+    inputs:
+      PathtoPublish: $(build.artifactstagingdirectory)
+...

@@ -1,0 +1,167 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+def serviceaccount = "jenkins-admin"
+podTemplate(label: label, serviceAccount: serviceaccount, containers: [
+    containerTemplate(name: 'zap', image: 'owasp/zap2docker-live', privileged: true, ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat')],
+    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
+    )
+{
+    currentBuild.description = "CDP,GDPR,HIPPA,PCI,SOX-${Project_Name}-${Workpod}"
+    node(label){
+        properties([pipelineTriggers([cron("${Schedule_Frequency}")]),
+        parameters([string(name: 'Schedule_Frequency', defaultValue: "$Schedule_Frequency"),
+        string(name: 'GIT_URL' , defaultValue: "$GIT_URL"),
+        string(name: 'URL', defaultValue: "http://a34ffe14581144f8a914f8ece9390834-2125881336.us-east-2.elb.amazonaws.com"),
+        string(name: 'Cloud', defaultValue: "AWS"),
+        string(name: 'Workpod', defaultValue: "$Workpod"),
+        string(name: 'Project_Name', defaultValue: "$Project_Name")])
+        ])
+        def DOCKER_HUB_ACCOUNT = 'aiindevops.azurecr.io'
+        
+        stage('repo clonning') {
+		      
+git branch: "compliance", url: "http://gitlab.ethan.svc.cluster.local:8084/gitlab/root/complianceascode_master.git" ,credentialsId: "gitlab"        
+    echo "${GIT_URL}"
+    }
+try{
+stage('DNS Headers'){
+ 
+			container('maven') {
+
+	sh '''
+	cd Compliance_Check
+    mvn test -DappURL="https://securityheaders.com/" -Dscanurl=$URL -DsuiteXmlFile=DNSHeaders.xml
+    cd "$PWD"/test-output/TestReport
+	mv *.zip Transport_Layer_Security.zip
+	rm -rf Zip_Latest*.zip
+	'''
+		withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+	 sh'''
+	 curl --upload-file Transport_Layer_Security.zip -u $USERNAME:$PASSWORD -v http://nexus.ethan.svc.cluster.local:8083/nexus/repository/Compliance_Security/${JOB_NAME}/$BUILD_ID/
+	 '''
+		}
+	}
+
+    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    sh "exit 0"
+                }
+	}
+}
+catch(Exception e){
+     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+         container('maven'){
+             	withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                sh'''
+                cd "$PWD"/test-output/TestReport
+	mv *.zip Transport_Layer_Security.zip
+	rm -rf Zip_Latest*.zip
+	 curl --upload-file Transport_Layer_Security.zip -u $USERNAME:$PASSWORD -v http://nexus.ethan.svc.cluster.local:8083/nexus/repository/Compliance_Security/${JOB_NAME}/$BUILD_ID/
+                '''
+                    sh "exit 1"
+                }
+         }
+     }
+}
+try{
+stage('WebScan') {
+
+	container('zap') {
+		try{
+			 sh 'mkdir /zap/wrk'
+			 sh 'ls -lart'
+			 sh '/zap/zap-baseline.py -t $URL -g gen.conf -r CloveReport.html'
+		}
+		catch (Exception e)
+		{
+		  sh 'echo e' 
+		}
+		finally
+		{
+		 sh 'ls -lart'
+		 sh 'mv /zap/wrk/CloveReport.html Zap.html'
+		 sh 'ls -lart'
+		 sh 'sleep 10'  
+		 
+		 container('maven'){
+		withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                  sh '''
+                  curl --upload-file Zap.html -u $USERNAME:$PASSWORD -v http://nexus.ethan.svc.cluster.local:8083/nexus/repository/Compliance_Security/${JOB_NAME}/$BUILD_ID/
+                  '''
+			}	  
+
+		}
+}
+}
+catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    sh "exit 0"
+                }
+}
+}
+catch(Exception e){
+     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh "exit 1"
+                }
+}
+try{
+if("$Cloud" == "AWS"){
+ stage('TLS version') {
+	container('maven') {
+	
+	sh'''
+    cd Compliance_Check
+    pwd
+    # give the platform url with username and password
+    mvn test -DSSLURL=$URL -DsuiteXmlFile=SslLabs_AWS.xml
+   
+	'''
+	}
+     catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    sh "exit 0"
+                }
+ }
+}
+}
+catch(Exception e){
+     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh "exit 1"
+                }
+}
+try{
+if ("$Cloud" == "AZURE" || "$Cloud" == "GCP") {
+	stage('TLS version') {
+	container('maven') {
+	sh'''
+    cd Compliance_Check
+    pwd
+    # give the platform url with username and password
+    mvn test -DSSLURL=$URL -DsuiteXmlFile=SslLabs_AzureGCP.xml
+   
+	'''
+
+	}
+     catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    sh "exit 0"
+                }
+	}
+ }
+}
+catch(Exception e){
+     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh "exit 1"
+                }
+}
+stage('Nexus uploader'){
+    container('maven'){
+        	 withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+				  sh '''
+				  cd "$PWD"/test-output/TestReport
+				  mv Zip_LatestTestReport*.zip Transport_Layer_Security1.zip
+				  curl --upload-file Transport_Layer_Security1.zip -u $USERNAME:$PASSWORD -v http://nexus.ethan.svc.cluster.local:8083/nexus/repository/Compliance_Security/${JOB_NAME}/$BUILD_ID/
+				
+				  '''
+				}
+    }
+}
+}
+}
+

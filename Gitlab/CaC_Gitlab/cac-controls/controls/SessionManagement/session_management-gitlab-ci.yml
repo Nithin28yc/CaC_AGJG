@@ -1,0 +1,76 @@
+image: markhobson/maven-chrome:jdk-11
+
+stages:
+    - repo-clone
+    - account-locking-for-multiple-failed-attempts
+    - cookie-timeout
+    - concurrent-session
+    - session-ID-encryption
+    - new-session-ID-for-logins
+    - unsecure-session-check
+
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+
+Repo-Cloning:
+    stage: repo-clone
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+                        
+Account Locking for multiple failed attempts:
+    stage: account-locking-for-multiple-failed-attempts
+    script:
+        - sleep 66
+            
+Cookie timeout:
+    stage: cookie-timeout
+    script:
+        - sleep 77
+        
+Concurrent session:
+    stage: concurrent-session
+    script:
+        - sleep 70
+        
+Session ID encryption:
+    stage: session-ID-encryption
+    script:
+        - sleep 57
+        
+New session ID for logins:
+    stage: new-session-ID-for-logins
+    script:
+        - sleep 80
+            
+Unsecure session check:
+    stage: unsecure-session-check
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - mvn test -DappURL="$appURL" -Dusername="$user_name" -Dpassword="$user_password" -DsuiteXmlFile=SessionManagement.xml
+        - cd `pwd`/test-output/TestReport
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport
+            
+
+        
+        
+

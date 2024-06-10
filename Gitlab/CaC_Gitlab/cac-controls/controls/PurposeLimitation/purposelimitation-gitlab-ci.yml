@@ -1,0 +1,44 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-cloning
+    - PII-data-purpose
+    - limited-data-collection
+    - specified-purpose
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+cache:
+    paths:
+        - .m2/repository
+        - target
+Repo-Cloning:
+    stage: repo-cloning
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+PII-Data-Purpose:
+    stage: PII-data-purpose
+    script:
+        - sleep 50
+Limited-Data-Collection:
+    stage: limited-data-collection
+    script:
+        - sleep 64
+Specified-Purpose:
+    stage: specified-purpose
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - pwd
+        - mvn test -DappURL="$appURL" -DenterpriseID=$USERNAME -DenterprisePassword=$PASSWORD -DsuiteXmlFile=Purpose_Limitation.xml
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport

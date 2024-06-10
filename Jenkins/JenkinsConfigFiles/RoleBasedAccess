@@ -1,0 +1,59 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+podTemplate(label: label, containers: [
+containerTemplate(name: 'maven', image: 'maven:3.8-openjdk-11', ttyEnabled: true, command: 'cat'),
+]) {
+currentBuild.description = "GDPR,PCI, SOX, HIPPA -${Project_Name}- ${Workpod}"
+ node(label) {
+     properties([pipelineTriggers([cron("${Schedule_Frequency}")]),
+        parameters([string(name: 'Schedule_Frequency', defaultValue: "$Schedule_Frequency"),
+        string(name: 'GIT_URL' , defaultValue: "$GIT_URL"),
+        string(name: 'appURL', defaultValue: "http://a34ffe14581144f8a914f8ece9390834-2125881336.us-east-2.elb.amazonaws.com"),
+        string(name: 'user_name', defaultValue: "test"),
+        string(name: 'user_password', defaultValue: "test"),
+        string(name: 'Workpod', defaultValue: "$Workpod"),
+        string(name: 'Project_Name', defaultValue: "$Project_Name")])
+        ])
+ stage('repo clonning') {
+		
+		git branch: "compliance", url: "http://gitlab.ethan.svc.cluster.local:8084/gitlab/root/complianceascode_master.git" ,credentialsId: "gitlab"  
+		echo "${GIT_URL}"
+}
+try{
+stage('Role based access')
+{
+	
+	container('maven') {
+	
+	sh'''
+    cd Compliance_Check
+    pwd
+    # give the platform url with username and password
+    mvn test -DappURL="$appURL" -Dusername="$user_name" -Dpassword="$user_password" -DsuiteXmlFile=RBAC_testng.xml
+   
+	'''
+}
+catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    sh "exit 0"
+                }
+}
+}
+catch(Exception e){
+     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh "exit 1"
+                }
+}
+stage ('Nexus upload'){
+    container('maven'){
+
+		  withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+				  sh '''
+				  cd "$PWD"/test-output/TestReport
+				  mv *.zip Role_Based_Access.zip
+				  curl --upload-file Role_Based_Access.zip -u $USERNAME:$PASSWORD -v http://nexus.ethan.svc.cluster.local:8083/nexus/repository/Compliance_Security/${JOB_NAME}/$BUILD_ID/
+				
+				  '''
+				}
+	}
+}
+}
+}

@@ -1,0 +1,12 @@
+pipeline {
+    agent any
+    stages {
+        stage('Submit Stack') {
+            steps {
+            withAWS(credentials: 'ansible', region: 'ap-southeast-2') {
+            sh "aws cloudformation create-stack --stack-name s3bucket --template-body file://simplestS3.json --region 'ap-southeast-2'"
+              }
+            }
+             }
+            }
+            }

@@ -1,0 +1,12 @@
+# ---
+# #pattern001:
+# #stages:
+#  # - triggers
+
+
+# pattern:
+#   stage: checkout
+#   # extends: build
+#   script: 
+#     - echo "Triggering Child Pipeline"
+#     - pwd

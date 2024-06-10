@@ -1,0 +1,75 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-cloning
+    - storage-encryption
+    - volume-encryption
+    - snapshots-encryption
+    - vault-keys-encryption
+variables: 
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+cache:
+    paths:
+        - .m2/repository
+        - target
+repo-cloning:
+    stage: repo-cloning
+    script:
+        - pwd
+        - git init
+        - git clone https://showcase2.continuoustestplatform.com/gitlab/root/chef-inspec-internal-validation.git 
+        - ls -lart
+        - cd chef-inspec-internal-validation
+    artifacts:
+        paths:
+            - chef-inspec-internal-validation/
+storage-encryption:
+    stage: storage-encryption
+    image: ubuntu
+    variables:
+        workspace: "$CI_PROJECT_DIR"
+    script:
+        - cd chef-inspec-internal-validation
+        - ls
+        - cd aws
+        - cd chef-inspec-aws
+        - apt update
+        - apt install curl -y
+        - curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
+        - dpkg -i $(pwd)/inspec.deb
+        - inspec
+        - inspec --chef-license=accept
+        - sed -i s/name/$S3_Bucket_name/g aws/controls/storage_encryption.rb
+        - aws_access_key_id=$AWS_ACCESS_KEY_ID aws_secret_access_key=$AWS_SECRET_ACCESS_KEY inspec exec aws/controls/storage_encryption.rb -t aws://$region --reporter yaml:Storage_Chef-inspec.yaml
+        - cat Storage_Chef-inspec.yaml
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport
+
+volume-encryption:
+    stage: volume-encryption
+    image: ubuntu
+    script:
+        - cd chef-inspec-internal-validation
+        - ls
+        - cd aws
+        - cd chef-inspec-aws
+        - apt update
+        - apt install curl -y
+        - curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
+        - dpkg -i $(pwd)/inspec.deb
+        - inspec
+        - inspec --chef-license=accept
+        - sed -i s/VolumeName/$Volume_name/g aws/controls/volume_encryption.rb
+        - aws_access_key_id=$AWS_ACCESS_KEY_ID aws_secret_access_key=$AWS_SECRET_ACCESS_KEY inspec exec aws/controls/volume_encryption.rb -t aws://$region --reporter yaml:Voulume_Chef-inspec.yaml
+        - cat Voulume_Chef-inspec.yaml
+snapshots-encryption:
+    stage: snapshots-encryption
+    script:
+        - sleep 90
+vault-keys-encryption:
+    stage: vault-keys-encryption
+    script:
+        - sleep 60
+
+
+            

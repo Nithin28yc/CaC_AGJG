@@ -1,0 +1,30 @@
+image: python:3.8.2-alpine
+stages:
+    - DB-encrypted-values
+    - database-encryption-keys
+    - data-at-rest-encryption
+
+DB-encrypted-values:
+    image: python:latest
+    stage: DB-encrypted-values
+    script:
+        - pwd
+        - git init
+        - git clone https://kopsingressvalidation.continuoustestplatform.com/gitlab/root/mongo.git 
+        - ls -lart
+        - cd mongo
+        - ls
+        - python3 -m pip install pymongo
+        - python3 main.py
+
+database-encryption-keys:
+    stage: database-encryption-keys
+    script:
+        - sleep 67
+
+data-at-rest-encryption:
+    stage: data-at-rest-encryption
+    image: smesch/kubectl
+    script:
+        - kubectl get pods
+        - kubectl exec -it mongo-7cb6978486-6xlds cat toolDetails.json

@@ -1,0 +1,73 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-cloning
+    - checkOV-terraform
+    - KICS
+    - network-security
+    - firewall-rule-security
+    - data-storage-and-encryption
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+Repo-Cloning:
+    stage: repo-cloning
+    script:
+        - pwd
+        - git init
+        - git clone https://github.com/terraform-aws-modules/terraform-aws-vpc.git -b master
+        - ls -lart
+        - cd terraform-aws-vpc
+    artifacts:
+        paths:
+            - terraform-aws-vpc/
+CheckOV-Terraform:
+    stage: checkOV-terraform
+    image: kennethreitz/pipenv:latest
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd terraform-aws-vpc
+        - ls
+        - pipenv install
+        - pipenv run pip install checkov
+        - pipenv run checkov -f $filename -o junitxml > result.xml || true
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/result.xml
+        reports:
+            junit: result.xml
+KICS:
+    stage: KICS
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - pwd
+        - git clone https://showcase2.continuoustestplatform.com/gitlab/root/harshitha_kics.git/
+        - ls -lart
+        - cd harshitha_kics
+        - wget -q -c https://github.com/Checkmarx/kics/releases/download/v1.2.4/kics_1.2.4_Linux_x64.tar.gz -O /tmp/kics.tar.gz
+        - tar xfzv /tmp/kics.tar.gz -C /tmp/
+        - mkdir -p results
+        - ls -lart
+        - /tmp/kics scan --ci --no-color -p $CI_PROJECT_DIR --output-path results --report-formats "html"
+Network-Security:
+    stage: network-security
+    script:
+        - sleep 67
+Firewall-Rule-Security:
+    stage: firewall-rule-security
+    script:
+        - sleep 87
+Data-Storage-and-Encryption:
+    stage: data-storage-and-encryption
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - sleep 57
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport

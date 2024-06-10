@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mvn test -DappURL="https://innersource.accenture.com/" -DenterpriseID="<accenture id- ...@accenture.com>" -DenterprisePassword="<accenture password>" -DsuiteXmlFile=Privileged_AccessManagement.xml -->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="Test">
+  
+  <parameter name="browserType" value="chrome" />
+
+    <classes>
+      <class name="compliance.Functional.PrivilegedAccessManagement"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

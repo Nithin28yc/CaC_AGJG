@@ -1,0 +1,40 @@
+{
+    "@type": "MessageCard",
+    "@context": "https://schema.org/extensions",
+    "summary": "This is the summary property",
+    "themeColor": "0075FF",
+    "sections": [
+        {
+            "startGroup": true,
+            "title": "**Pending approval**",
+            "activityTitle": "Requested by **Jenkins Admin**",
+            "activitySubtitle": "jenkins.admin@multicloudTesting.com",
+            "facts": [
+                {
+                    "name": "Build Number:",
+                    "value": "{build_no}"
+                },
+                {
+                    "name": "Date:",
+                    "value": "<<Enter TIme>>"
+                },
+                {
+                    "name": "Details:",
+                    "value": "Please approve the next stage to deployment"
+                },
+                {
+                    "name": "Link 1:",
+                    "value": "[**Link to the view pipeline**](https://multiclouddemo.gvsmb.com/jenkinscore/job/${jobname}/)"
+                },
+                {
+                    "name": "Link 2:",
+                    "value": "[***Link to approve build***](https://multiclouddemo.gvsmb.com/jenkinscore/job/${jobname}/${build_no}/input/)"
+                }
+            ]
+        },
+        {
+            "startGroup": true,
+            "activitySubtitle": "Grant approvals directly from your mobile device with the Microsoft Flow app. [Learn more](https://learnmode)\n\nThis message was created by an automated workflow in Microsoft Flow. Do not reply."
+        }
+    ]
+}

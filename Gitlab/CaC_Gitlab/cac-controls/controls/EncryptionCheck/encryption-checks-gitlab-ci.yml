@@ -1,0 +1,58 @@
+image: markhobson/maven-chrome:jdk-11
+
+stages:
+    - repo-clone
+    - AES-encryption-of-credentials
+    - vulnerability-to-insecure-data-transmission
+    - password-masking
+
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+
+Repo-Cloning:
+    stage: repo-clone
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+                        
+AES encryption of credentials:
+    stage: AES-encryption-of-credentials
+    script:
+        - sleep 66
+            
+Vulnerability to Insecure data transmission (HTTP):
+    stage: vulnerability-to-insecure-data-transmission
+    script:
+        - sleep 55
+            
+Password Masking:
+    stage: password-masking
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - mvn test -DappURL="$appURL" -Dusername="$user_name" -Dpassword="$user_password" -DsuiteXmlFile=Data_Masking.xml
+        - cd `pwd`/test-output/TestReport
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport
+            
+
+        
+        
+

@@ -1,0 +1,28 @@
+
+
+stages:
+    - zap scan
+
+
+ 
+OWASP top 10 vulnerability checks:
+    stage: zap scan
+    image: owasp/zap2docker-stable
+    script:
+        - pwd
+        - pip3 install -U python_owasp_zap_v2.4
+        - /usr/bin/python3 -m pip install --upgrade pip
+        - mkdir /zap/wrk
+        - ls -lrt
+        - set +e
+        - /zap/zap-baseline.py -t "$appURL" -g gen.conf -I -r zap.html
+        - cp /zap/wrk/zap.html $(pwd)
+        - ls -lrt
+        - sleep 10     
+    artifacts:
+        paths:
+            - zap.html
+   
+
+
+

@@ -1,0 +1,60 @@
+name: Authentication
+
+on:
+  workflow_dispatch:
+
+jobs:   
+  job1:  
+    name: ESO login authentication
+    if: always()
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Build
+      run: sleep 10
+      
+  job2:  
+    needs: job1
+    name: API end points authentication
+    if: always()
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Build
+      run: sleep 10
+    
+  job3:  
+    name: Application login authentication  
+    if: always()
+    needs: job2
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build with Mavev
+      run: |
+        cd Compliance_Check
+        mvn test -DappURL="${{ secrets.APPURL }}" -Dusername="${{ secrets.USERNAME }}" -Dpassword="${{ secrets.PASSWORD }}" -DsuiteXmlFile=RBAC_testng.xml
+        cd `pwd`/test-output/TestReport
+        ls
+    - name: Upload report to artifact
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: AuthenticationReport
+        path: ${{ github.workspace }}/Compliance_Check/test-output/TestReport/LatestTestReport
+        
+  job4:  
+    needs: job3
+    name: Bypass authentication
+    if: always()
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Build
+      run: sleep 9
+      
+  job5:  
+    needs: job4
+    name: MFA not implemented/ Lack of two factor authentication
+    if: always()
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Build
+      run: sleep 9

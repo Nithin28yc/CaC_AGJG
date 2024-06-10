@@ -1,0 +1,65 @@
+name: TransportLayerSecurity
+
+on:
+  workflow_dispatch:
+
+jobs:   
+  job1:  
+    name: DNS Headers
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build with Mavev
+      run: |
+        cd Compliance_Check
+        mvn test -DappURL="https://securityheaders.com/" -Dscanurl="${{ secrets.APPURL }}"  -DsuiteXmlFile=DNSHeaders.xml
+        cd `pwd`/test-output/TestReport
+        ls
+    - name: Upload report to artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: TransportLayerSecurity_DNSHeaders
+        path: ${{ github.workspace }}/Compliance_Check/test-output/TestReport/LatestTestReport
+      
+  job2:  
+    name: Scan the webapplication
+    needs: job1
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.8.2
+        with:
+          docker_name: 'owasp/zap2docker-stable'
+          target: '${{ secrets.APPURL }}'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+        
+      - name: Upload report to artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: VulnerabilityManagement
+          path: ${{ github.workspace }}
+    
+  job3:  
+    name: TLS version 
+    if: always()
+    needs: job2
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build with Mavev
+      run: |
+        cd Compliance_Check
+        mvn test -DSSLURL="${{ secrets.APPURL }}" -DsuiteXmlFile=SslLabs_AWS.xml
+        cd `pwd`/test-output/TestReport
+        ls
+    - name: Upload report to artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: TransportLayerSecurity_TLSversion 
+        path: ${{ github.workspace }}/Compliance_Check/test-output/TestReport/LatestTestReport

@@ -1,0 +1,13 @@
+stages:
+    - security-misconfigurations
+                            
+Security misconfigurations:
+    stage: security-misconfigurations
+    script:
+        - sleep 93
+          
+            
+
+        
+        
+

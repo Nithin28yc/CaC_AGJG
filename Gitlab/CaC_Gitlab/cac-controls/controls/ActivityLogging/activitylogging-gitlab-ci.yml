@@ -1,0 +1,60 @@
+image: markhobson/maven-chrome:jdk-11
+
+stages:
+    - repo-clonning
+    - event-logging
+    - nsg-flow-logs
+    - mfa-for-long-storage
+    - sns-without-public-access
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+
+Repo-Clonning:
+    stage: repo-clonning
+    script:
+        - pwd
+        - git init
+        - git clone https://showcase2.continuoustestplatform.com/gitlab/root/chef-inspec-internal-validation.git -b master
+        - ls -lart
+        - cd chef-inspec-internal-validation
+    artifacts:
+        paths:
+            - chef-inspec-internal-validation/
+Event-Logging:
+    stage: event-logging
+    script:
+        - sleep 55
+NSG-flow-Logs:
+    stage: nsg-flow-logs
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - ls
+        - cd chef-inspec-internal-validation
+        - ls
+        - cd aws
+        - ls
+        - cd chef-inspec-aws
+        - apt update
+        - apt install curl -y
+        - curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
+        - dpkg -i $(pwd)/inspec.deb
+        - inspec
+        - inspec --chef-license=accept
+        - sed -i s/name/$FlowLog_Id/g aws/controls/Activity_logging-NSG-flowlog.rb
+        - aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_ACCESS_KEY inspec exec aws/controls/Activity_logging-NSG-flowlog.rb -t aws://$region --reporter yaml:Flowlog_Chef-inspec.yaml
+        - cat Flowlog_Chef-inspec.yaml
+MFA-for-Long-Storage:
+    stage: mfa-for-long-storage
+    script:
+        - sleep 70
+SNS-without-Public-Access:
+    stage: sns-without-public-access
+    script:
+        - sleep 62
+

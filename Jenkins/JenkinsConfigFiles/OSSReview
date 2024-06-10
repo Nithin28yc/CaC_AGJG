@@ -1,0 +1,94 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+def serviceaccount = "jenkins-admin"
+
+
+import java.text.SimpleDateFormat
+import java.util.Calendar
+def date = Calendar.getInstance();
+def timeunits= date.getTimeInMillis();
+def dateAfterFiveMin=new Date(timeunits + (5 * 60000));
+def dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+def formattedDate = dateFormat.format(dateAfterFiveMin)
+
+podTemplate(label: label, serviceAccount: serviceaccount, containers: [
+	containerTemplate(name: 'maven', image: 'maven', ttyEnabled: true, command: 'cat'),
+	containerTemplate(name: 'ubuntu', image: 'ubuntu', ttyEnabled: true, command: 'cat'),]){
+node(label){
+
+        properties([pipelineTriggers([cron("${Schedule_Frequency}")]),
+        parameters([string(name: 'Schedule_Frequency', defaultValue: "$Schedule_Frequency"),
+        string(name: 'GIT_URL' , defaultValue: "$GIT_URL"),
+        string(name: 'Workpod', defaultValue: "$Workpod"),
+        string(name: 'Project_Name', defaultValue: "$Project_Name")])
+        ])
+
+            stage('Git Checkout') {
+                git branch: "development", url: "http://gitlab.ethan.svc.cluster.local:8084/gitlab/root/complianceascode_master.git" ,credentialsId: "gitlab"
+                echo "${GIT_URL}"
+}
+           		try{
+        		stage('Snyk scan') {
+				
+				container('maven'){
+				   
+                 sh '''
+                 apt-get update
+                 apt-get -y install python3-pip
+                 pip3 --version
+                 pip3 install --user pipenv
+                 curl -sSL https://install.python-poetry.org | python3 -
+                 pip3 install setup-py-cli
+                 pip3 install --upgrade pip setuptools==57.5.0
+                 apt-get -y install Node.js 
+                 apt-get -y install npm
+                 npm install -g snyk
+                 npm install snyk-to-html -g
+                 snyk auth b51db3d3-71cc-4b60-bc08-5a6ec9deb99a
+                 export PATH=/usr/local/bin:$PATH
+                 apt-get -y install python3-venv
+                 python3 -m venv .venv
+                 . .venv/bin/activate
+                 apt-get -y install libjpeg-dev zlib1g-dev
+                 python3 --version
+                 pip3 install Pillow
+                 apt-get -y install libatlas-base-dev gfortran
+                 pip3 install -r source/requirements.txt
+                 snyk test --file=source/requirements.txt --json | snyk-to-html -o vuln.html
+                 '''
+				}
+		
+				def vulnerabilities = sh(script: "grep -c 'High' vuln.html", returnStatus: true)
+		     if (vulnerabilities == 'High' ) {
+                            currentBuild.result = 'SUCCESS'
+                } 
+                else {
+                            currentBuild.result = 'FAILURE'
+                            error "Security vulnerabilities found!"
+                        }
+                         catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    sh "exit 0"
+                }
+    } 
+   
+        		}
+        		catch(Exception e){
+     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh "exit 1"
+                }
+}
+    stage('nexus-uplaod'){
+        container('ubuntu'){
+		     sh 'apt-get update'
+		     sh 'apt-get install zip -y'
+             sh 'zip OSS_review.zip vuln.html'
+        container('maven'){
+             withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+		    {
+              sh '''
+			  curl --upload-file OSS_review.zip -u $USERNAME:$PASSWORD -v http://nexus.ethan.svc.cluster.local:8083/nexus/repository/Compliance_Security/${JOB_NAME}/$BUILD_ID/
+                '''
+			} }
+        }
+   } }
+    
+}

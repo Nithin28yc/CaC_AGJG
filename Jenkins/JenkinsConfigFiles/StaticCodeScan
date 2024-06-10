@@ -1,0 +1,43 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+def serviceaccount = "jenkins-admin"
+
+
+import java.text.SimpleDateFormat
+import java.util.Calendar
+def date = Calendar.getInstance();
+def timeunits= date.getTimeInMillis();
+def dateAfterFiveMin=new Date(timeunits + (5 * 60000));
+def dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+def formattedDate = dateFormat.format(dateAfterFiveMin)
+podTemplate(label: label, serviceAccount: serviceaccount)
+{
+    node(label) {  
+
+		
+        currentBuild.description = "SAST -${Project_Name}- $Workpod"
+               properties([pipelineTriggers([cron("${Schedule_Frequency}")]),
+        parameters([string(name: 'Schedule_Frequency', defaultValue: "$Schedule_Frequency"),
+        string(name: 'GIT_URL' , defaultValue: "$GIT_URL"),
+        string(name: 'Workpod', defaultValue: "$Workpod"),
+        string(name: 'Project_Name', defaultValue: "$Project_Name")])
+        ])     
+
+            stage('Git Checkout - cac') {
+				git branch: "development", url: "http://gitlab:8084/gitlab/root/complianceascode_master.git" ,credentialsId: "gitlab"
+				echo "${GIT_URL}"
+                def function = load "${WORKSPACE}/JenkinsFunctions_Java.groovy"
+   
+
+              stage('CodeScan-SonarQube') {
+
+                withCredentials([usernamePassword(credentialsId: 'sonar-creds', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]){
+                    withSonarQubeEnv('SonarQube') {
+                        println('Sonar Method enter');
+                        function.sonarMethod()
+                    }
+                }
+            }
+}
+         }
+    }
+         

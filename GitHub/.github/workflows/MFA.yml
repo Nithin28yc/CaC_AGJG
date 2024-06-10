@@ -1,0 +1,52 @@
+name: MultiFactorAuthentication
+
+on:
+   workflow_dispatch:
+
+jobs:   
+  job1:  
+    name: Use of captcha
+    if: always()
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Build
+      run: sleep 10
+      
+  job2:  
+    needs: job1
+    name: mfa- password check
+    if: always()
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Build
+      run: sleep 10
+    
+  job3:  
+    name: mfa -biometric check 
+    if: always()
+    needs: job2
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build with Mavev
+      run: |
+        cd Compliance_Check
+        mvn test -DappURL="${{ secrets.APPURL }}" -Dusername="${{ secrets.USERNAME }}" -Dpassword="${{ secrets.PASSWORD }}" -DsuiteXmlFile=testing_MFA.xml
+        cd `pwd`/test-output/TestReport
+        ls
+    - name: Upload report to artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: MultiFactorAuthentication
+        path: ${{ github.workspace }}/Compliance_Check/test-output/TestReport/LatestTestReport
+        
+  job4:  
+    needs: job3
+    name: mfa- pin check
+    if: always()
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Build
+      run: sleep 9
+    

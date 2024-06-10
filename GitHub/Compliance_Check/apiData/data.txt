@@ -1,0 +1,1335 @@
+[
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": null
+            },
+            "timestamp": "Fri, 04 Jun 2021 05:27:35 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": null
+            },
+            "timestamp": "Fri, 04 Jun 2021 06:21:46 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 06:27:03 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 07:47:09 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 07:58:26 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 10:04:24 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 10:06:15 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 11:26:43 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 11:28:20 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 11:32:51 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 11:33:29 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": null,
+                    "complexity": null
+                },
+                "duplication": {
+                    "duplicated_lines": null
+                },
+                "issues": {
+                    "blocker_issues": null,
+                    "critical_issues": null,
+                    "major_issues": null,
+                    "minor_issues": null,
+                    "new_blocker_issues": null,
+                    "new_critical_issues": null,
+                    "new_major_issues": null,
+                    "new_minor_issues": null,
+                    "open_issues": null,
+                    "violations": null
+                },
+                "maintainability": {
+                    "code_smells": null,
+                    "new_code_smells": null,
+                    "new_sqale_debt_ratio": null,
+                    "new_sqale_index": null,
+                    "sqale_debt_ratio": null,
+                    "sqale_index": null,
+                    "sqale_rating": null
+                },
+                "reliability": {
+                    "bugs": null,
+                    "new_bugs": null,
+                    "new_reliability_remediation_effort": null,
+                    "reliability_remediation_effort": null
+                },
+                "security": {
+                    "new_security_remediation_effort": null,
+                    "new_vulnerabilities": null,
+                    "security_rating": null,
+                    "security_remediation_effort": null,
+                    "vulnerabilities": null
+                },
+                "size": {
+                    "classes": null,
+                    "functions": null,
+                    "ncloc": null
+                },
+                "unittests": {
+                    "coverage": null,
+                    "line_coverage": null,
+                    "new_coverage": null,
+                    "new_line_coverage": null,
+                    "test_errors": null,
+                    "test_execution_time": null,
+                    "test_success_density": null,
+                    "tests": null,
+                    "uncovered_conditions": null
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 12:16:20 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": null,
+                    "complexity": null
+                },
+                "duplication": {
+                    "duplicated_lines": null
+                },
+                "issues": {
+                    "blocker_issues": null,
+                    "critical_issues": null,
+                    "major_issues": null,
+                    "minor_issues": null,
+                    "new_blocker_issues": null,
+                    "new_critical_issues": null,
+                    "new_major_issues": null,
+                    "new_minor_issues": null,
+                    "open_issues": null,
+                    "violations": null
+                },
+                "maintainability": {
+                    "code_smells": null,
+                    "new_code_smells": null,
+                    "new_sqale_debt_ratio": null,
+                    "new_sqale_index": null,
+                    "sqale_debt_ratio": null,
+                    "sqale_index": null,
+                    "sqale_rating": null
+                },
+                "reliability": {
+                    "bugs": null,
+                    "new_bugs": null,
+                    "new_reliability_remediation_effort": null,
+                    "reliability_remediation_effort": null
+                },
+                "security": {
+                    "new_security_remediation_effort": null,
+                    "new_vulnerabilities": null,
+                    "security_rating": null,
+                    "security_remediation_effort": null,
+                    "vulnerabilities": null
+                },
+                "size": {
+                    "classes": null,
+                    "functions": null,
+                    "ncloc": null
+                },
+                "unittests": {
+                    "coverage": null,
+                    "line_coverage": null,
+                    "new_coverage": null,
+                    "new_line_coverage": null,
+                    "test_errors": null,
+                    "test_execution_time": null,
+                    "test_success_density": null,
+                    "tests": null,
+                    "uncovered_conditions": null
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Fri, 04 Jun 2021 12:20:10 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Mon, 07 Jun 2021 05:01:01 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Mon, 07 Jun 2021 10:17:19 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Tue, 08 Jun 2021 06:23:44 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Tue, 08 Jun 2021 06:24:40 GMT",
+            "uniqueid": null
+        }
+    },
+    {
+        "devops": {
+            "codebranch": {
+                "codebranchid": "Branch_Branch",
+                "isrelease": null,
+                "name": "Branch",
+                "reponames": "Branch"
+            },
+            "codequality": {
+                "complexity": {
+                    "cognitive_complexity": 234,
+                    "complexity": 9
+                },
+                "duplication": {
+                    "duplicated_lines": 0
+                },
+                "issues": {
+                    "blocker_issues": 0,
+                    "critical_issues": 0,
+                    "major_issues": 0,
+                    "minor_issues": 3,
+                    "new_blocker_issues": 0,
+                    "new_critical_issues": 0,
+                    "new_major_issues": 0,
+                    "new_minor_issues": 0,
+                    "open_issues": 3,
+                    "violations": 3
+                },
+                "maintainability": {
+                    "code_smells": 2,
+                    "new_code_smells": 0,
+                    "new_sqale_debt_ratio": 0.0,
+                    "new_sqale_index": 0,
+                    "sqale_debt_ratio": 0.4,
+                    "sqale_index": 10,
+                    "sqale_rating": 1.0
+                },
+                "reliability": {
+                    "bugs": 0,
+                    "new_bugs": 0,
+                    "new_reliability_remediation_effort": 32,
+                    "reliability_remediation_effort": 0
+                },
+                "security": {
+                    "new_security_remediation_effort": 0,
+                    "new_vulnerabilities": 0,
+                    "security_rating": 2.0,
+                    "security_remediation_effort": 30,
+                    "vulnerabilities": 1
+                },
+                "size": {
+                    "classes": 1,
+                    "functions": 6,
+                    "ncloc": 77
+                },
+                "unittests": {
+                    "coverage": 213.0,
+                    "line_coverage": 532.0,
+                    "new_coverage": 87.0,
+                    "new_line_coverage": 65.0,
+                    "test_errors": 34,
+                    "test_execution_time": 243.0,
+                    "test_success_density": 234.0,
+                    "tests": 54,
+                    "uncovered_conditions": 12
+                }
+            },
+            "projectdetails": {
+                "projectid": "SIMongoTesting"
+            },
+            "timestamp": "Mon, 28 Jun 2021 09:54:13 GMT",
+            "uniqueid": null
+        }
+    }
+]
+HTTP/1.1 200 OK

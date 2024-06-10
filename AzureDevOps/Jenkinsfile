@@ -1,0 +1,128 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+def serviceaccount = "jenkins-admin"
+podTemplate(label: label, serviceAccount: serviceaccount, 
+    containers: [containerTemplate(name: 'python', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/python', ttyEnabled: true, command: 'cat'),
+	containerTemplate(name: 'curl', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/curl:0.1', ttyEnabled: true, alwaysPullImage: true, command: 'cat'),
+	containerTemplate(name: 'git-secrets', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/git-secrets:0.1', ttyEnabled: true, alwaysPullImage: true, command: 'cat'),
+	containerTemplate(name: 'go', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/go', ttyEnabled: true, command: 'cat'),
+	containerTemplate(name: 'maven', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/maven:3.8-openjdk-11', ttyEnabled: true, command: 'cat',resourceRequestCpu: '150m',resourceLimitCpu: '4000m',resourceRequestMemory: '100Mi',resourceLimitMemory: '7000Mi'),
+    containerTemplate(name: 'kubeaudit', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/kube-audit:0.1', ttyEnabled: true, alwaysPullImage: true, command: 'cat'),
+	containerTemplate(name: 'clair-scanner', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/clair-scanner:0.1', ttyEnabled: true, alwaysPullImage: true, command: 'cat', ports: [portMapping(name: 'clair-scanner', containerPort: '9279')]),
+    containerTemplate(name: 'jmeter', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/jmeter', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'jq', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/jq', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'helm', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/lachlanevenson', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'zap', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/zap2docker-stable:2.12', privileged: true, ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'kubectl', image: "${env.DNS_URL}"+'/root/docker_registry/aiindevops.azurecr.io/docker-kubectl:19.03-alpine', ttyEnabled: true, command: 'cat',
+               volumes: [secretVolume(secretName: 'kube-config', mountPath: '/root/.kube')])],
+   	imagePullSecrets: ['gcrcred'],
+    yaml: """
+        spec:
+          containers:
+          - name: trivy
+            image: ${env.DNS_URL}/root/docker_registry/aiindevops.azurecr.io/trivy:0.9.2
+            tty: true
+            command: ["/bin/sh"]
+          - name: kaniko
+            image: ${env.DNS_URL}/root/docker_registry/aiindevops.azurecr.io/kaniko:v1.3.0-debug
+            imagePullPolicy: IfNotPresent
+            command:
+            - /busybox/cat
+            tty: true
+            volumeMounts:
+            - name: my-secret
+              mountPath: /kaniko/.docker
+          volumes:
+          - name: my-secret
+            projected:
+              sources:
+              - secret:
+                  name: gitlabcred
+                  items:
+                    - key: .dockerconfigjson
+                      path: config.json
+    """
+    ) 
+{
+node (label) {
+    def CREDENTIALS_ID = "gitlab"
+    def DOCKER_IMG_NAME = 'pythonapp'
+    def VERSION = "v1.0"
+    def K8S_DEPLOYMENT_NAME = 'pythonapp-api'
+    def MONGO_DEPLOYMENT = 'mongopy'
+    def TEST_FILE_NAME = "jenkins_test_app.py"
+    def deployment_path = "vars/cd/k8s-deployments/"
+    
+    def GITLAB_REPO_URL = "${env.GITLAB_REPO_URL}"
+    def GITLAB_BRANCH = "${env.GITLAB_BRANCH_NAME}"
+    def REPO = "${env.REPO_NAME}"
+    def NAMESPACE = "${env.NAMESPACE}"
+    def CLUSTER_NAME = "${env.CLUSTER_NAME}"
+    def PROVISION_ID = "${env.PROVISION_ID}"
+
+    String DNS_NAME = "${GITLAB_REPO_URL}".split("://")[1].split("/")[0];
+    def GCR_HUB_ACCOUNT = DNS_NAME + "/root"
+    echo "GITLAB_REPO_URL - ${GITLAB_REPO_URL}"
+    echo "GITLAB_BRANCH - ${GITLAB_BRANCH}"
+    echo "REPO - ${REPO}"
+    echo "GCR_HUB_ACCOUNT - ${GCR_HUB_ACCOUNT}"
+
+    /**** provide Sonar metrickeys which needs to be published to Jenkins console ***/
+	String metricKeys = "coverage,code_smells,bugs,vulnerabilities,sqale_index,tests,ncloc,quality_gate_details,duplicated_lines_density";
+	def SONAR_UI='http://sonar.ethan.svc.cluster.local:9001/sonar/api/measures/component?metricKeys=';
+	
+	/*** For Java - COMPONENT_KEY value should be same as what is given in pom file groupId:artifactID 
+		 For NodeJs - COMPONENT_KEY value should be same as what is given as ProjectName in in sonar.properies file ***/		
+	def COMPONENT_KEY='Python';
+	
+	def CONT_REGISTRY = "gitlab:8223/root/docker_registry/${REPO}/${DOCKER_IMG_NAME}:${VERSION}"
+
+    //Current repository
+    library identifier: "pythonappent@${GITLAB_BRANCH}", retriever: modernSCM([$class: 'GitSCMSource',remote: "${GITLAB_REPO_URL}",credentialsId: "${CREDENTIALS_ID}"])
+    // **********************************************************************************************************
+    //This clone stage is from current repository
+    ci_clone_pythonapp(url : "${GITLAB_REPO_URL}", repo : "${REPO}",  branch : "${GITLAB_BRANCH}", creds : "${CREDENTIALS_ID}")
+    // **********************************************************************************************************
+    //Git secret scan.
+    ci_gitsecrets_pythonapp(repo : "${REPO}")
+    // **********************************************************************************************************
+    //Create MongoDB Instance
+    ci_mongoinstance_pythonapp(repo : "${REPO}", namespace : "${NAMESPACE}",mongo_deployment : "${MONGO_DEPLOYMENT}", credentialid : "${CREDENTIALS_ID}", gcraccount: "${GCR_HUB_ACCOUNT}", provisionid: "${PROVISION_ID}", dns: "${DNS_NAME}") 
+    //Unit test case for app.py
+    //ci_unittest_pythonapp(repo : "${REPO}", filename : "${TEST_FILE_NAME}", namespace : "${NAMESPACE}")
+    // **********************************************************************************************************
+    //SonarQube analysis
+    ci_sonaranalysis_pythonapp(repo : "${REPO}", metrickeys: "${metricKeys}", sonar_ui: "${SONAR_UI}", component_key: "${COMPONENT_KEY}")
+    // **********************************************************************************************************
+    //Build and deploy stage from current repo
+    // **********************************************************************************************************
+    //Build IMage
+    ci_build_pythonapp(repo : "${REPO}", cont_registry: "${CONT_REGISTRY}", namespace : "${NAMESPACE}")
+    // **********************************************************************************************************
+    //Scan Built Image
+    cs_trivyscan_pythonapp(repo: "${REPO}", cont_registry: "${CONT_REGISTRY}", label: "${label}")
+    // **********************************************************************************************************
+    //Push Built Image to gcr registry.
+    ci_pushimage_pythonapp(cont_registry: "${CONT_REGISTRY}", repo: "${REPO}", credentialid : "${CREDENTIALS_ID}", gcraccount: "${GCR_HUB_ACCOUNT}")
+    // **********************************************************************************************************
+    //kubectl check , kube-bench scan & kube-audit scan
+    cs_kubectlcheck_pythonapp(repo: "${REPO}", provisionid: "${PROVISION_ID}", gitlabrepourl : "${GITLAB_REPO_URL}", namespace : "${NAMESPACE}")
+    // **********************************************************************************************************
+    //delete svc created for clairscan.
+    //ci_deleteslavesvc_pythonapp(repo: "${REPO}", label: "${label}")
+    // **********************************************************************************************************
+    //default deploy to dev
+    cd_deployenv_pythonapp(repo: "${REPO}", namespace : "${NAMESPACE}", deployment_name : "${K8S_DEPLOYMENT_NAME}", container_registry : "${CONT_REGISTRY}", docker_image_name : "${DOCKER_IMG_NAME}", version: "${VERSION}", credentialid : "${CREDENTIALS_ID}",gcraccount: "${GCR_HUB_ACCOUNT}", deploy_path:"${deployment_path}", provisionid: "${PROVISION_ID}", dns: "${DNS_NAME}")
+    // **********************************************************************************************************
+    //User Notification and Approval for Build stage in Microsoft teams channel
+    //cd_approvedeployment_pythonapp(repo: "${REPO}", namespace:"${STAGING_NS}")
+    // **********************************************************************************************************
+    //run tests from and push reports to demo repository
+    //ct_DemoRepotestcases_pythonapp(repo: "${REPO}", credentialid : "${CREDENTIALS_ID}")
+    // **********************************************************************************************************
+    //CT stage for application
+    ct_continoustest_pythonapp(repo: "${REPO}", namespace : "${NAMESPACE}", deployment_name : "${K8S_DEPLOYMENT_NAME}", provisionid: "${PROVISION_ID}")
+    // **********************************************************************************************************
+    //Webscan the ELB of your application
+    cs_webscan_pythonapp(repo: "${REPO}",namespace : "${NAMESPACE}", deployment_name : "${K8S_DEPLOYMENT_NAME}", provisionid: "${PROVISION_ID}")
+    }
+    }

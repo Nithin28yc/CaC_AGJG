@@ -1,0 +1,82 @@
+image: markhobson/maven-chrome:jdk-11
+
+stages:
+    - repo-clone
+    - dns-headers
+    - webscan
+    - tls-version
+  
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+
+Repo-Cloning:
+    stage: repo-clone
+    script:
+        - pwd
+        - git init
+        - git clone https://innersource.accenture.com/scm/ethan/ct_complianceascode.git -b keerthana
+        - ls -lart
+        - cd ct_complianceascode
+    artifacts:
+        paths:
+            - ct_complianceascode/
+                        
+DNS Headers:
+    stage: dns-headers
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - mvn test -DappURL="https://securityheaders.com/" -Dscanurl="$appURL" -DsuiteXmlFile=DNSHeaders.xml
+        - cd `pwd`/test-output/TestReport
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport
+                   
+Webscan:
+    stage: webscan
+    image: owasp/zap2docker-stable
+    script:
+        - pwd
+        - pip3 install -U python_owasp_zap_v2.4
+        - /usr/bin/python3 -m pip install --upgrade pip
+        - mkdir /zap/wrk
+        - ls -lrt
+        - set +e
+        - /zap/zap-baseline.py -t "$appURL" -g gen.conf -I -r zap.html
+        - cp /zap/wrk/zap.html $(pwd)
+        - ls -lrt
+        - sleep 10
+    artifacts:
+        paths:
+            - zap.html
+
+TLS Version:
+    stage: tls-version
+    variables:
+        WORKSPACE: "$CI_PROJECT_DIR"
+    script:
+        - cd ct_complianceascode
+        - ls
+        - cd Compliance_Check
+        - ls
+        - pwd
+        - >
+          if [[ '$Cloud == "AWS"' ]]; then
+            mvn test -DSSLURL="$appURL" -DsuiteXmlFile=SslLabs_AWS.xml
+          elif [[ '$Cloud == "AZURE"' || '"$Cloud" == "GCP"' ]]; then
+            mvn test -DSSLURL="$appURL" -DsuiteXmlFile=SslLabs_AzureGCP.xml
+          fi
+        - cd `pwd`/test-output/TestReport
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport

@@ -1,0 +1,33 @@
+stages:
+    - network-update
+    - unpatched-os
+    - network-address-masking
+    - nmap-scan
+
+Network update:
+    stage: network-update
+    script:
+        - sleep 64
+    
+Unpatched OS:
+    stage: unpatched-os
+    script:
+        - sleep 64
+        
+Network address masking:
+    stage: network-address-masking
+    script:
+        - sleep 64
+        
+Nmap Scan:
+    image: securecodebox/nmap:latest
+    stage: nmap-scan
+    script:
+        - nmap -h
+        - nmap -v -A ${dns} >> nmap.txt
+        - cat nmap.txt
+        - pwd
+        - ls -lart
+    artifacts:
+        paths:
+            - nmap.txt

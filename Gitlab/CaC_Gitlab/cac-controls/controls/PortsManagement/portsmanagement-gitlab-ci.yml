@@ -1,0 +1,53 @@
+image: markhobson/maven-chrome:jdk-11
+
+stages:
+    - HTTPS-port
+    - Secured-SSL-port
+    - TCP/IP-based_communication
+    - Unauthorised-port-access
+    - nmap-scan
+
+variables:
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+    paths:
+        - .m2/repository
+        - target
+
+
+
+HTTPS-Port:
+    stage: HTTPS-port
+    script:
+        - sleep 77
+Secured-SSL-PORT:
+    stage: Secured-SSL-port
+    script: 
+        - sleep 89
+
+TCP/IP-based_Communication:
+    stage: TCP/IP-based_communication
+    script:
+        - sleep 60
+
+Unauthorised-Port-Access:
+    stage: Unauthorised-port-access
+    script:
+        - sleep 60
+
+Nmap Scan:
+    image: securecodebox/nmap:latest
+    stage: nmap-scan
+    script:
+        - nmap -h
+        - nmap -v -A ${dns} >> nmap.txt
+        - cat nmap.txt
+        - pwd
+        - ls -lart
+    artifacts:
+        paths:
+            - nmap.txt
+
+                  
+

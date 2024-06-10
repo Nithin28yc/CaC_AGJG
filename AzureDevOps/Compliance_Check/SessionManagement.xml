@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mvn test -DappURL="https://qemainlatest.continuoustestplatform.com/" -Dusername="e" -Dpassword="DRmc" -DsuiteXmlFile=SessionManagement.xml-->
+
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="Test">
+  <parameter name="browserType" value="chrome" />
+    <parameter name="appURL" value="$(appURL)" />
+		<parameter name="username" value="$(username)" />
+		<parameter name="password" value="$(password)" />
+
+    <classes>
+      <class name="compliance.Functional.SessionManagement"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

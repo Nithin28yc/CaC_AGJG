@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pythonapp-api
+spec:
+  selector:
+    matchLabels:
+      app: pythonapp-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pythonapp-api
+    spec:
+      imagePullSecrets:
+        - name: gitlab-auth
+      containers:
+      - name: pythonapp-api
+        image: dns/root/docker_registry/repo/imagename:imagetag
+        imagePullPolicy: Always
+        env:
+        - name: NAMESPACE
+          value: USER_NAMESPACE
+        ports:
+        - containerPort: 5000

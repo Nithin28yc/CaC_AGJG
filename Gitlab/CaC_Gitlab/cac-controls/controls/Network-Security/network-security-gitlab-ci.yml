@@ -1,0 +1,71 @@
+image: markhobson/maven-chrome:jdk-11
+stages:
+    - repo-cloning
+    - secure-inbound-access-rules
+    - secure-outbound-access-rules
+    - vpc-endpoints-checks
+    - secure-elb-listeners
+variables: 
+    MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+cache:
+    paths:
+        - .m2/repository
+        - target
+repo-cloning:
+    stage: repo-cloning
+    script:
+        - pwd
+        - git init
+        - git clone https://showcase2.continuoustestplatform.com/gitlab/root/chef-inspec-internal-validation.git 
+        - ls -lart
+        - cd chef-inspec-internal-validation
+    artifacts:
+        paths:
+            - chef-inspec-internal-validation/
+secure-inbound-access-rules:
+    stage: secure-inbound-access-rules
+    image: ubuntu
+    variables:
+        workspace: "$CI_PROJECT_DIR"
+    script:
+        - cd chef-inspec-internal-validation
+        - ls
+        - cd aws
+        - cd chef-inspec-aws
+        - apt update
+        - apt install curl -y
+        - curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
+        - dpkg -i $(pwd)/inspec.deb
+        - inspec
+        - inspec --chef-license=accept
+        - sed -i s/inbound/$InboundSecurityGrp_Id/g aws/controls/network_security-inbound.rb
+        - aws_access_key_id=$AWS_ACCESS_KEY_ID aws_secret_access_key=$AWS_SECRET_ACCESS_KEY inspec exec aws/controls/network_security-inbound.rb -t aws://$region --reporter yaml:InboundSecurityGrp_Chef-inspec.yaml
+        - cat InboundSecurityGrp_Chef-inspec.yaml
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/test-output/TestReport
+secure-outbound-access-rules:
+    stage: secure-outbound-access-rules
+    image: ubuntu
+    script:
+        - cd chef-inspec-internal-validation
+        - ls
+        - cd aws
+        - cd chef-inspec-aws
+        - apt update
+        - apt install curl -y
+        - curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
+        - dpkg -i $(pwd)/inspec.deb
+        - inspec
+        - inspec --chef-license=accept
+        - sed -i s/outbound/$OutboundSecurityGrp_Id/g aws/controls/network_security-outbound.rb
+        - aws_access_key_id=$AWS_ACCESS_KEY_ID aws_secret_access_key=$AWS_SECRET_ACCESS_KEY inspec exec aws/controls/network_security-outbound.rb -t aws://$region --reporter yaml:OutboundSecurityGrp_Chef-inspec.yaml
+        - cat OutboundSecurityGrp_Chef-inspec.yaml
+vpc-endpoints-checks:
+    stage: vpc-endpoints-checks
+    script:
+        - sleep 70
+secure-elb-listeners:
+    stage: secure-elb-listeners
+    script:
+        - sleep 65

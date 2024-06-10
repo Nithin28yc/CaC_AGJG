@@ -1,0 +1,49 @@
+AWS::EC2::VPC {
+    Properties {
+	CidrBlock == "10.0.0.0/16"
+	EnableDnsSupport == false
+        EnableDnsHostnames == false
+    }
+}
+AWS::EC2::Subnet {
+    Properties {
+	CidrBlock == "10.0.1.0/24"
+#   AvailabilityZone in ['ap-southeast-2a', 'ap-southeast-2b', 'ap-southeast-2c']
+    }
+}
+AWS::EC2::SecurityGroup {
+    Properties {
+    SecurityGroupIngress != [{"CidrIp":"0.0.0.0/0","FromPort":22,"IpProtocol":"ssh","ToPort":22}]
+	SecurityGroupIngress.* == [{"CidrIp":"0.0.0.0/0","FromPort":80,"IpProtocol":"tcp","ToPort":80}]
+	SecurityGroupEgress == [{"CidrIp":"0.0.0.0/0","FromPort":80,"IpProtocol":"tcp","ToPort":80}]
+    }
+}
+AWS::EC2::Volume {
+    Properties {
+        Encrypted == true   #making it fakse for negative scenario validation. should be ideally marked true.
+        Size <= 10
+        VolumeType == 'gp2'
+    }
+}
+
+AWS::EC2::Instance {
+    Properties {
+	ImageId == "ami-0567f647e75c7bc05"
+	KeyName == "cloudKeyPair"
+	InstanceType in ['t2.nano', 't2.micro', 't3.medium']
+	NetworkInterfaces == [{"GroupSet":["InstanceSecurityGroup"],"AssociatePublicIpAddress":"true","DeviceIndex":"0", 
+                          "SubnetId":"PublicSubnetA"}]
+    }
+}
+
+// AWS::S3::Bucket {
+//     Properties {
+//         AccessControl == "Private"
+//         PublicAccessBlockConfiguration == [{"BlockPublicAcls":true,"BlockPublicPolicy":true,"IgnorePublicAcls":true,
+//                                              "RestrictPublicBuckets": true}]
+//         VersioningConfiguration == [{"Status": "Enabled"}]
+//         BucketEncryption == [{"ServerSideEncryptionConfiguration":[{"ServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}]
+//     }
+// }
+
+	

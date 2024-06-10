@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--mvn test -DappURL="https://aksssltesting.azuretestplatform.com/" -Dusername="ein" -Dpassword="IIai78" -Dldapuname="hin" -DldapEmail="t" -DldapPass="D" -DsuiteXmlFile=Uniqueness.xml -->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="Test">
+  
+  <parameter name="browserType" value="chrome" />
+		
+    <classes>
+      <class name="compliance.Functional.uniqueness"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

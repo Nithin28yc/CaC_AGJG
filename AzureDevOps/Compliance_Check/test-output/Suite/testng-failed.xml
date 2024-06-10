@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
+  <test thread-count="5" name="Test(failed)">
+    <parameter name="scanurl" value="http://ac58b0e29175a472c8e41d643e42174f-1526285351.us-east-2.elb.amazonaws.com/"/>
+    <parameter name="appURL" value="https://securityheaders.com/"/>
+    <parameter name="browserType" value="chrome"/>
+    <classes>
+      <class name="compliance.Functional.DNSHeaders">
+        <methods>
+          <include name="SecurityHeaders"/>
+          <include name="startReport"/>
+          <include name="register"/>
+          <include name="endReport"/>
+          <include name="setPlatformType"/>
+          <include name="endDriver"/>
+          <include name="getResult"/>
+          <include name="initSetUp"/>
+        </methods>
+      </class> <!-- compliance.Functional.DNSHeaders -->
+    </classes>
+  </test> <!-- Test(failed) -->
+</suite> <!-- Failed suite [Suite] -->
